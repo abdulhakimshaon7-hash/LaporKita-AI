@@ -1,0 +1,3 @@
+node_modules/
+*.localfunctions/serviceAccountKey.json
+functions/serviceAccountKey.json

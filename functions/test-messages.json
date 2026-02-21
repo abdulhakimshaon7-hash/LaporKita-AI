@@ -1,0 +1,121 @@
+[ {
+    "id": 1,
+    "message": "Lampu jalan kat depan rumah dah rosak 2 minggu, gelap gila malam. Tolong baiki segera!",
+    "expected_urgency": "HIGH",
+    "expected_category": "infrastructure",
+    "expected_sentiment": "frustrated",
+    "notes": "Street light broken - HIGH urgency (safety issue, 2 weeks)"
+  },
+  {
+    "id": 2,
+    "message": "Ada orang buang sampah haram kat tepi longkang tu. Dah lama dah tapi takde orang ambik peduli.",
+    "expected_urgency": "MEDIUM",
+    "expected_category": "sanitation",
+    "expected_sentiment": "disappointed",
+    "notes": "Illegal dumping - MEDIUM (ongoing but not immediate danger)"
+  },
+  {
+    "id": 3,
+    "message": "EMERGENCY! Pokok besar nak tumbang ke jalan raya! Ada angin kencang tadi. Bahaya untuk kereta dan orang lalu lalang!",
+    "expected_urgency": "CRITICAL",
+    "expected_category": "safety",
+    "expected_sentiment": "alarmed",
+    "notes": "Falling tree - CRITICAL (immediate danger to life)"
+  },
+  {
+    "id": 4,
+    "message": "The playground equipment near Block C is rusty and a child almost got injured yesterday. Please fix before someone gets seriously hurt.",
+    "expected_urgency": "HIGH",
+    "expected_category": "safety",
+    "expected_sentiment": "concerned",
+    "notes": "Playground safety - HIGH (child safety risk)"
+  },
+  {
+    "id": 5,
+    "message": "Lif kat blok B rosak dah 3 hari. Orang tua dan ibu mengandung susah nak guna tangga. Tolonglah!",
+    "expected_urgency": "HIGH",
+    "expected_category": "infrastructure",
+    "expected_sentiment": "distressed",
+    "notes": "Broken elevator - HIGH (affects vulnerable residents)"
+  },
+  {
+    "id": 6,
+    "message": "Parking area flooding when it rains. Small issue but happens every week since last month.",
+    "expected_urgency": "LOW",
+    "expected_category": "drainage",
+    "expected_sentiment": "neutral",
+    "notes": "Parking flood - LOW (minor, recurring but not urgent)"
+  },
+  {
+    "id": 7,
+    "message": "Bau busuk sangat dari longkang kat belakang blok A. Rasa macam ada paip tersumbat atau takungan air yang dah lama.",
+    "expected_urgency": "MEDIUM",
+    "expected_category": "sanitation",
+    "expected_sentiment": "uncomfortable",
+    "notes": "Bad smell/drain - MEDIUM (health concern but not immediate)"
+  },
+  {
+    "id": 8,
+    "message": "Water supply disrupted since this morning 8am. No water at all. Please help urgently we have baby at home!!",
+    "expected_urgency": "CRITICAL",
+    "expected_category": "utilities",
+    "expected_sentiment": "panicked",
+    "notes": "No water supply - CRITICAL (basic necessity, baby at home)"
+  },
+  {
+    "id": 9,
+    "message": "Ada anjing liar berkeliaran dalam kawasan perumahan. Dah nampak lebih 5 ekor. Risau kanak-kanak kena gigit.",
+    "expected_urgency": "HIGH",
+    "expected_category": "safety",
+    "expected_sentiment": "worried",
+    "notes": "Stray dogs - HIGH (child safety risk)"
+  },
+  {
+    "id": 10,
+    "message": "Suggestion je: boleh letak lebih banyak bangku kat taman? Sekarang takde tempat nak duduk-duduk. Thanks 😊",
+    "expected_urgency": "LOW",
+    "expected_category": "amenities",
+    "expected_sentiment": "friendly",
+    "notes": "Bench suggestion - LOW (nice to have, not a complaint)"
+  },
+  {
+    "id": 11,
+    "message": "Rumah jiran asyik buat bising lepas 12 tengah malam. Dah 3 hari tak boleh tidur. Boleh buat apa-apa tak?",
+    "expected_urgency": "MEDIUM",
+    "expected_category": "noise",
+    "expected_sentiment": "tired",
+    "notes": "Noise complaint - MEDIUM (ongoing disturbance)"
+  },
+  {
+    "id": 12,
+    "message": "Jalan masuk ke kawasan perumahan ada lubang besar. Tayar kereta dah kena sekali. Minta baiki ASAP!!!",
+    "expected_urgency": "HIGH",
+    "expected_category": "infrastructure",
+    "expected_sentiment": "angry",
+    "notes": "Road pothole - HIGH (vehicle damage, ongoing risk)"
+  },
+  {
+    "id": 13,
+    "message": "Lampu jalan area playground rosak. Dah gelap malam ni.",
+    "expected_urgency": "HIGH",
+    "expected_category": "infrastructure",
+    "expected_sentiment": "concerned",
+    "notes": "More street light - HIGH (clusters with message 1)"
+  },
+  {
+    "id": 14,
+    "message": "Street light outside gate broken, dangerous at night for kids walking home from tuition.",
+    "expected_urgency": "HIGH",
+    "expected_category": "infrastructure",
+    "expected_sentiment": "worried",
+    "notes": "Yet another street light - should cluster with 1 and 13"
+  },
+  {
+    "id": 15,
+    "message": "Saya rasa air yang keluar dari paip ada bau pelik. Warna pun nampak kekuningan sikit. Selamat ke minum?",
+    "expected_urgency": "CRITICAL",
+    "expected_category": "utilities",
+    "expected_sentiment": "alarmed",
+    "notes": "Water quality concern - CRITICAL (health risk)"
+  }
+]
