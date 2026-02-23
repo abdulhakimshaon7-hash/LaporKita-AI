@@ -1,4 +1,5 @@
-// The main dashboard screen — shows stats, alerts, clusters, and reports
+// File: laporkita_dashboard/lib/screens/dashboard_screen.dart
+// Main dashboard — stat cards now pass filters to ReportsFeed
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +17,20 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // Currently selected section in the sidebar
   int _selectedIndex = 0;
+
+  // Filters passed to ReportsFeed when a stat card is tapped
+  String _reportsUrgencyFilter = 'ALL';
+  String _reportsStatusFilter = 'ALL';
+
+  // Called by StatsRow — switches tab and sets filter
+  void _changeTab(int index, {String urgency = 'ALL', String status = 'ALL'}) {
+    setState(() {
+      _selectedIndex = index;
+      _reportsUrgencyFilter = urgency;
+      _reportsStatusFilter = status;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +44,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(width: 8),
             const Text('LaporKita AI Dashboard'),
             const Spacer(),
-            // Current user email
             Text(
               FirebaseAuth.instance.currentUser?.email ?? '',
               style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
             const SizedBox(width: 16),
-            // Logout button
             IconButton(
               icon: const Icon(Icons.logout, color: Colors.white),
               onPressed: () => FirebaseAuth.instance.signOut(),
@@ -49,11 +60,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       body: Row(
         children: [
-          // ===== SIDEBAR =====
+          // Sidebar
           NavigationRail(
             selectedIndex: _selectedIndex,
             onDestinationSelected: (index) {
-              setState(() => _selectedIndex = index);
+              setState(() {
+                _selectedIndex = index;
+                // Reset filters when manually switching tabs
+                if (index != 1) {
+                  _reportsUrgencyFilter = 'ALL';
+                  _reportsStatusFilter = 'ALL';
+                }
+              });
             },
             labelType: NavigationRailLabelType.all,
             destinations: const [
@@ -76,39 +94,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
 
-          // Vertical divider between sidebar and content
           const VerticalDivider(thickness: 1, width: 1),
 
-          // ===== MAIN CONTENT =====
           Expanded(child: _buildContent()),
         ],
       ),
     );
   }
 
-  // Build the appropriate content based on selected sidebar item
   Widget _buildContent() {
     switch (_selectedIndex) {
       case 0:
-        return const OverviewTab();
+        return OverviewTab(onTabChange: _changeTab);
       case 1:
-        return const ReportsFeed();
+        // Key forces widget to rebuild when filters change
+        return ReportsFeed(
+          key: ValueKey('$_reportsUrgencyFilter-$_reportsStatusFilter'),
+          initialUrgency: _reportsUrgencyFilter,
+          initialStatus: _reportsStatusFilter,
+        );
       case 2:
         return const ClustersList();
       case 3:
         return const MapScreen();
       default:
-        return const OverviewTab();
+        return OverviewTab(onTabChange: _changeTab);
     }
   }
 }
 
 // =====================================================================
 // OVERVIEW TAB
-// Shows stats cards + critical alerts at the top
 // =====================================================================
 class OverviewTab extends StatelessWidget {
-  const OverviewTab({super.key});
+  final Function(int, {String urgency, String status}) onTabChange;
+
+  const OverviewTab({super.key, required this.onTabChange});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +138,6 @@ class OverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section title
           const Text(
             'Dashboard Overview',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -129,11 +149,9 @@ class OverviewTab extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Stats cards row
-          const StatsRow(),
+          StatsRow(onTabChange: onTabChange),
           const SizedBox(height: 24),
 
-          // Critical alerts
           const Text(
             '🚨 Critical & High Priority Alerts',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

@@ -1,35 +1,78 @@
+// File: laporkita_dashboard/lib/widgets/reports_feed.dart
 // Scrollable list of all reports with filtering
+// Accepts initialUrgency and initialStatus so stat cards can pre-filter
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReportsFeed extends StatefulWidget {
-  const ReportsFeed({super.key});
+  final String initialUrgency;
+  final String initialStatus;
+
+  const ReportsFeed({
+    super.key,
+    this.initialUrgency = 'ALL',
+    this.initialStatus = 'ALL',
+  });
 
   @override
   State<ReportsFeed> createState() => _ReportsFeedState();
 }
 
 class _ReportsFeedState extends State<ReportsFeed> {
-  String _filterUrgency = 'ALL';
-  String _filterStatus = 'ALL';
+  late String _filterUrgency;
+  late String _filterStatus;
 
-  // Build the Firestore query based on current filters
-  Query<Map<String, dynamic>> _buildQuery() {
-    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+  @override
+  void initState() {
+    super.initState();
+    _filterUrgency = widget.initialUrgency;
+    _filterStatus = widget.initialStatus;
+  }
+
+  // ─────────────────────────────────────────────
+  // KEY FIX: Never combine orderBy with where() filters
+  // Firestore requires a composite index for that combination
+  // which causes infinite loading on web.
+  // Instead: fetch all reports and filter/sort client-side.
+  // ─────────────────────────────────────────────
+  Stream<QuerySnapshot> _buildQuery() {
+    // Always fetch all reports — filter client-side to avoid index issues
+    return FirebaseFirestore.instance
         .collection('reports')
-        .orderBy('timestamp', descending: true)
-        .limit(50); // Show only 50 most recent
+        .limit(100)
+        .snapshots();
+  }
 
-    if (_filterUrgency != 'ALL') {
-      query = query.where('urgency', isEqualTo: _filterUrgency);
-    }
+  // Apply filters and sorting client-side
+  List<QueryDocumentSnapshot> _applyFilters(List<QueryDocumentSnapshot> docs) {
+    var filtered = docs.where((doc) {
+      final data = doc.data() as Map<String, dynamic>;
 
-    if (_filterStatus != 'ALL') {
-      query = query.where('status', isEqualTo: _filterStatus);
-    }
+      if (_filterUrgency != 'ALL' && data['urgency'] != _filterUrgency) {
+        return false;
+      }
 
-    return query;
+      if (_filterStatus != 'ALL' && data['status'] != _filterStatus) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+
+    // Sort by timestamp descending client-side
+    filtered.sort((a, b) {
+      final aData = a.data() as Map<String, dynamic>;
+      final bData = b.data() as Map<String, dynamic>;
+      final aTime = aData['timestamp'];
+      final bTime = bData['timestamp'];
+      if (aTime == null && bTime == null) return 0;
+      if (aTime == null) return 1;
+      if (bTime == null) return -1;
+      return (bTime as Timestamp).compareTo(aTime as Timestamp);
+    });
+
+    return filtered;
   }
 
   @override
@@ -48,7 +91,7 @@ class _ReportsFeedState extends State<ReportsFeed> {
               ),
               const Spacer(),
 
-              // Urgency filter dropdown
+              // Urgency filter
               DropdownButton<String>(
                 value: _filterUrgency,
                 onChanged: (val) => setState(() => _filterUrgency = val!),
@@ -63,17 +106,29 @@ class _ReportsFeedState extends State<ReportsFeed> {
               ),
               const SizedBox(width: 16),
 
-              // Status filter dropdown
+              // Status filter
               DropdownButton<String>(
                 value: _filterStatus,
                 onChanged: (val) => setState(() => _filterStatus = val!),
-                items: ['ALL', 'pending', 'analyzed', 'in_progress', 'resolved']
+                items: ['ALL', 'pending', 'in_progress', 'resolved']
                     .map(
                       (s) =>
                           DropdownMenuItem(value: s, child: Text('Status: $s')),
                     )
                     .toList(),
               ),
+
+              // Clear filters button
+              const SizedBox(width: 8),
+              if (_filterUrgency != 'ALL' || _filterStatus != 'ALL')
+                TextButton.icon(
+                  onPressed: () => setState(() {
+                    _filterUrgency = 'ALL';
+                    _filterStatus = 'ALL';
+                  }),
+                  icon: const Icon(Icons.clear, size: 16),
+                  label: const Text('Clear'),
+                ),
             ],
           ),
           const SizedBox(height: 16),
@@ -81,17 +136,40 @@ class _ReportsFeedState extends State<ReportsFeed> {
           // Reports list
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: _buildQuery().snapshots(),
+              stream: _buildQuery(),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final docs = snapshot.data!.docs;
+                final docs = _applyFilters(snapshot.data!.docs);
 
                 if (docs.isEmpty) {
-                  return const Center(
-                    child: Text('No reports found with these filters.'),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.inbox, size: 64, color: Colors.grey[300]),
+                        const SizedBox(height: 16),
+                        const Text('No reports found with these filters.'),
+                        if (_filterUrgency != 'ALL' || _filterStatus != 'ALL')
+                          TextButton(
+                            onPressed: () => setState(() {
+                              _filterUrgency = 'ALL';
+                              _filterStatus = 'ALL';
+                            }),
+                            child: const Text('Clear filters'),
+                          ),
+                      ],
+                    ),
                   );
                 }
 
@@ -119,7 +197,6 @@ class ReportListItem extends StatelessWidget {
 
   const ReportListItem({super.key, required this.reportId, required this.data});
 
-  // Map urgency level to color
   Color _urgencyColor(String? urgency) {
     switch (urgency) {
       case 'CRITICAL':
@@ -151,7 +228,7 @@ class ReportListItem extends StatelessWidget {
         ),
         title: Row(
           children: [
-            if (urgency != null)
+            if (urgency != null && urgency != 'ANALYZING')
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
@@ -174,8 +251,11 @@ class ReportListItem extends StatelessWidget {
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
             const Spacer(),
-            if (data['cluster_id'] != null)
-              const Icon(Icons.link, size: 16, color: Colors.purple),
+            if (data['cluster_id'] != null && data['cluster_id'] != '')
+              const Tooltip(
+                message: 'Part of a cluster',
+                child: Icon(Icons.link, size: 16, color: Colors.purple),
+              ),
           ],
         ),
         subtitle: Text(
@@ -198,9 +278,6 @@ class ReportListItem extends StatelessWidget {
       case 'in_progress':
         chipColor = Colors.blue;
         break;
-      case 'analyzed':
-        chipColor = Colors.purple;
-        break;
       default:
         chipColor = Colors.grey;
     }
@@ -222,30 +299,43 @@ class ReportListItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(
-          'Report Details: ${reportId.substring(0, 8).toUpperCase()}',
-        ),
+        title: Text('Report: ${reportId.substring(0, 8).toUpperCase()}'),
         content: SizedBox(
           width: 500,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _detailRow('Message', data['message'] ?? 'N/A'),
-              _detailRow('Urgency', data['urgency'] ?? 'Processing...'),
-              _detailRow('Category', data['category'] ?? 'Processing...'),
-              _detailRow('Sentiment', data['sentiment'] ?? 'N/A'),
-              _detailRow('Location', data['location'] ?? 'Not specified'),
-              _detailRow('AI Summary', data['summary'] ?? 'Not yet analyzed'),
-              _detailRow(
-                'Recommended Action',
-                data['recommended_action'] ?? 'N/A',
-              ),
-              _detailRow('Status', data['status'] ?? 'pending'),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _detailRow('Message', data['message'] ?? 'N/A'),
+                _detailRow('Urgency', data['urgency'] ?? 'Processing...'),
+                _detailRow('Category', data['category'] ?? 'Processing...'),
+                _detailRow('Sentiment', data['sentiment'] ?? 'N/A'),
+                _detailRow('Location', data['location'] ?? 'Not specified'),
+                _detailRow('AI Summary', data['summary'] ?? 'Not yet analyzed'),
+                _detailRow(
+                  'Action Suggested',
+                  data['action_suggested'] ?? 'N/A',
+                ),
+                _detailRow('Status', data['status'] ?? 'pending'),
+              ],
+            ),
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () {
+              FirebaseFirestore.instance
+                  .collection('reports')
+                  .doc(reportId)
+                  .update({'status': 'in_progress'});
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Mark In Progress',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
           TextButton(
             onPressed: () {
               FirebaseFirestore.instance

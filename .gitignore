@@ -138,3 +138,11 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 functions/serviceAccountKey.json
+test-data/serviceAccountKey.json
+test-data/serviceAccountKey.json
+# Secret keys — never commit these!
+scripts/firebase-service-account.json
+test-data/serviceAccountKey.json
+**/*service-account*.json
+**/*serviceAccount*.json
+**/serviceAccountKey.json

@@ -1,5 +1,5 @@
-// File: app/laporkita_dashboard/lib/screens/map_screen.dart
-// Interactive Google Maps view of complaints at The Grand Subang SS13
+// File: lib/screens/map_screen.dart
+// Interactive Google Maps view — reads lat/lng from Firestore reports
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -16,10 +16,8 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  // Verified coordinates from Google Maps URLs
-  // Main building / Tower 1: 3.0700928, 101.596767
-  // Tower 2 lobby:           3.0711299, 101.5966792
-  static const LatLng _defaultCenter = LatLng(3.0706, 101.5967);
+  // KL city center — zoomed out so all markers across KL are visible
+  static const LatLng _defaultCenter = LatLng(3.1390, 101.6869);
 
   Set<Marker> _markers = {};
   Set<Circle> _circles = {};
@@ -42,6 +40,7 @@ class _MapScreenState extends State<MapScreen> {
 
   // ─────────────────────────────────────────────
   // LOAD REPORT MARKERS
+  // Reads latitude/longitude directly from Firestore — no text conversion
   // ─────────────────────────────────────────────
   Future<void> _loadReportMarkers() async {
     final snapshot = await FirebaseFirestore.instance
@@ -53,24 +52,34 @@ class _MapScreenState extends State<MapScreen> {
     for (final doc in snapshot.docs) {
       final data = doc.data();
 
+      // Skip reports still being analyzed
       if (data['urgency'] == null || data['urgency'] == 'ANALYZING') continue;
-      if (_filterUrgency != 'ALL' && data['urgency'] != _filterUrgency)
-        continue;
 
-      final locationStr = (data['location'] as String?) ?? '';
-      final coords = _locationToCoords(locationStr);
-      if (coords == null) continue;
+      // Apply urgency filter if set
+      if (_filterUrgency != 'ALL' && data['urgency'] != _filterUrgency) {
+        continue;
+      }
+
+      // READ lat/lng directly from Firestore fields — this is the key fix!
+      final lat = data['latitude'];
+      final lng = data['longitude'];
+
+      // Skip if no coordinates stored
+      if (lat == null || lng == null) continue;
 
       final urgency = data['urgency'] as String? ?? 'MEDIUM';
+      final category = data['category'] as String? ?? 'general';
+      final message = data['message'] as String? ?? '';
+      final snippet = message.length > 60 ? message.substring(0, 60) : message;
 
       newMarkers.add(
         Marker(
           markerId: MarkerId(doc.id),
-          position: coords,
+          position: LatLng((lat as num).toDouble(), (lng as num).toDouble()),
           icon: BitmapDescriptor.defaultMarkerWithHue(_urgencyToHue(urgency)),
           infoWindow: InfoWindow(
-            title: '$urgency — ${data['category'] ?? 'Unknown'}',
-            snippet: data['summary'] ?? data['message'] ?? 'No info',
+            title: '$urgency — $category',
+            snippet: snippet,
           ),
         ),
       );
@@ -82,6 +91,7 @@ class _MapScreenState extends State<MapScreen> {
 
   // ─────────────────────────────────────────────
   // LOAD CLUSTER CIRCLES
+  // Also reads lat/lng from the first report in each cluster
   // ─────────────────────────────────────────────
   Future<void> _loadClusterCircles() async {
     if (!_showClusters) {
@@ -98,14 +108,12 @@ class _MapScreenState extends State<MapScreen> {
 
     for (final doc in snapshot.docs) {
       final data = doc.data();
-
-      final category = data['category'] as String? ?? '';
       final urgency = data['urgency'] as String? ?? 'MEDIUM';
       final reportCount = data['report_count'] as int? ?? 3;
 
-      LatLng? coords;
+      LatLng? center;
 
-      // Get location from first report in cluster
+      // Get coordinates from first report in the cluster
       final reportIds = data['report_ids'] as List?;
       if (reportIds != null && reportIds.isNotEmpty) {
         try {
@@ -113,24 +121,27 @@ class _MapScreenState extends State<MapScreen> {
               .collection('reports')
               .doc(reportIds.first as String)
               .get();
+
           if (reportDoc.exists) {
-            final locationStr =
-                (reportDoc.data()?['location'] as String?) ?? '';
-            coords = _locationToCoords(locationStr);
+            final lat = reportDoc.data()?['latitude'];
+            final lng = reportDoc.data()?['longitude'];
+            if (lat != null && lng != null) {
+              center = LatLng((lat as num).toDouble(), (lng as num).toDouble());
+            }
           }
         } catch (e) {
-          print('Could not fetch cluster report location: $e');
+          print('Could not fetch cluster report coords: $e');
         }
       }
 
-      // Fallback to category-based location
-      coords ??= _categoryToCoords(category);
+      // Fallback to KL center if no coords found
+      center ??= _defaultCenter;
 
       newCircles.add(
         Circle(
           circleId: CircleId(doc.id),
-          center: coords,
-          radius: 25.0 + (reportCount * 8),
+          center: center,
+          radius: 500.0 + (reportCount * 100), // Bigger radius at city scale
           fillColor: _urgencyToColor(urgency).withOpacity(0.25),
           strokeColor: _urgencyToColor(urgency),
           strokeWidth: 3,
@@ -140,79 +151,6 @@ class _MapScreenState extends State<MapScreen> {
 
     setState(() => _circles = newCircles);
     print('✅ Loaded ${newCircles.length} cluster circles on map');
-  }
-
-  // ─────────────────────────────────────────────
-  // LOCATION → COORDINATES
-  // Based on verified Google Maps coordinates:
-  //   Tower 1 (main): 3.0700928, 101.596767
-  //   Tower 2 lobby:  3.0711299, 101.5966792
-  //   Shared facilities between the two towers
-  // ─────────────────────────────────────────────
-  LatLng? _locationToCoords(String location) {
-    final l = location.toLowerCase();
-
-    // Tower 1 — verified coordinate: 3.0700928, 101.596767
-    if (l.contains('tower 1') || l.contains('tower1')) {
-      return LatLng(3.0700928 + _tinyOffset(), 101.596767 + _tinyOffset());
-    }
-
-    // Tower 2 — verified coordinate: 3.0711299, 101.5966792
-    if (l.contains('tower 2') || l.contains('tower2')) {
-      return LatLng(3.0711299 + _tinyOffset(), 101.5966792 + _tinyOffset());
-    }
-
-    // Shared facilities — placed between the two towers
-    if (l.contains('swimming pool') || l.contains('kolam renang')) {
-      return const LatLng(3.0706, 101.5968);
-    }
-    if (l.contains('gym')) {
-      return const LatLng(3.0705, 101.5966);
-    }
-    if (l.contains('playground') || l.contains('taman permainan')) {
-      return const LatLng(3.0707, 101.5965);
-    }
-    if (l.contains('surau') || l.contains('musolla')) {
-      return const LatLng(3.0704, 101.5967);
-    }
-
-    // Guard house — near main entrance at Tower 1
-    if (l.contains('guard house') ||
-        l.contains('guardhouse') ||
-        l.contains('main entrance') ||
-        l.contains('pintu masuk')) {
-      return const LatLng(3.0699, 101.5966);
-    }
-
-    // Basement parking — below Tower 1 (slightly offset down)
-    if (l.contains('basement') || l.contains('parking')) {
-      return const LatLng(3.0701, 101.5964);
-    }
-
-    // Any other location — place near building center
-    return LatLng(3.0706 + _tinyOffset(), 101.5967 + _tinyOffset());
-  }
-
-  // Category fallback — used when no report location is found
-  LatLng _categoryToCoords(String category) {
-    switch (category) {
-      case 'infrastructure':
-        return const LatLng(3.0702, 101.5967);
-      case 'environment':
-        return const LatLng(3.0701, 101.5965);
-      case 'safety':
-        return const LatLng(3.0699, 101.5966);
-      case 'health':
-        return const LatLng(3.0706, 101.5968);
-      default:
-        return const LatLng(3.0706, 101.5967);
-    }
-  }
-
-  // Tiny random offset so stacked markers are slightly separated
-  double _tinyOffset() {
-    final values = [-0.0003, -0.0002, -0.0001, 0.0001, 0.0002, 0.0003];
-    return values[DateTime.now().microsecond % values.length];
   }
 
   // ─────────────────────────────────────────────
@@ -267,7 +205,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                'The Grand Subang SS13',
+                'Klang Valley Community Reports',
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               const Spacer(),
@@ -346,7 +284,7 @@ class _MapScreenState extends State<MapScreen> {
               child: GoogleMap(
                 initialCameraPosition: const CameraPosition(
                   target: _defaultCenter,
-                  zoom: 18, // Building level — shows both towers
+                  zoom: 11, // City level — shows all of KL/Selangor
                 ),
                 markers: _markers,
                 circles: _circles,

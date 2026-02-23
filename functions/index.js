@@ -1,14 +1,70 @@
 // File: functions/index.js
-// LaporKita AI — Complete backend: Webhook + Gemini Analysis + Clustering
+// LaporKita AI — Complete backend: Webhook + Gemini Analysis + Clustering + Authority Alerts
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const twilio = require('twilio');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Initialize Firebase ONCE
+// firebase-admin v13 — must import Firestore this way
+const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+
 admin.initializeApp();
-const db = admin.firestore();
+const db = getFirestore(); // ← replaces the old admin.firestore()
+
+// Malaysian location coordinates lookup table
+// Gemini extracts location names — we convert them to lat/lng for the map
+const MALAYSIA_COORDS = {
+  // Kuala Lumpur areas
+  "bukit jalil": { lat: 3.0580, lng: 101.6900 },
+  "cheras": { lat: 3.0833, lng: 101.7500 },
+  "wangsa maju": { lat: 3.2000, lng: 101.7333 },
+  "taman melati": { lat: 3.2167, lng: 101.7333 },
+  "setapak": { lat: 3.2000, lng: 101.7167 },
+  "kepong": { lat: 3.2167, lng: 101.6333 },
+  "segambut": { lat: 3.1833, lng: 101.6667 },
+  "bangsar": { lat: 3.1333, lng: 101.6833 },
+  "chow kit": { lat: 3.1667, lng: 101.7000 },
+  "ampang": { lat: 3.1500, lng: 101.7667 },
+  "pandan indah": { lat: 3.1167, lng: 101.7500 },
+  "sri petaling": { lat: 3.0667, lng: 101.6833 },
+  "taman desa": { lat: 3.0833, lng: 101.6833 },
+  "bangsar south": { lat: 3.1116, lng: 101.6641 },
+  "batu caves": { lat: 3.2333, lng: 101.6833 },
+  "gombak": { lat: 3.2500, lng: 101.7167 },
+  "jalan ipoh": { lat: 3.1833, lng: 101.6833 },
+  "bandar tun razak": { lat: 3.0833, lng: 101.7333 },
+  "taman connaught": { lat: 3.0833, lng: 101.7500 },
+  // Selangor areas
+  "petaling jaya": { lat: 3.1073, lng: 101.6067 },
+  "ss2": { lat: 3.1167, lng: 101.6167 },
+  "subang jaya": { lat: 3.0500, lng: 101.5833 },
+  "usj": { lat: 3.0333, lng: 101.5833 },
+  "puchong": { lat: 3.0000, lng: 101.6167 },
+  "cyberjaya": { lat: 2.9167, lng: 101.6500 },
+  "putrajaya": { lat: 2.9264, lng: 101.6964 },
+  "klang": { lat: 3.0333, lng: 101.4500 },
+  "shah alam": { lat: 3.0733, lng: 101.5185 },
+  "damansara": { lat: 3.1500, lng: 101.6167 },
+  "batu 9 cheras": { lat: 3.0000, lng: 101.7500 },
+  // Default KL center if nothing matches
+  "kuala lumpur": { lat: 3.1390, lng: 101.6869 },
+  "kl": { lat: 3.1390, lng: 101.6869 },
+};
+
+// Convert a location string to coordinates
+// Returns { lat, lng } or null if not found
+function getCoordinates(locationString) {
+  if (!locationString) return null;
+  const lower = locationString.toLowerCase();
+  // Try exact match first
+  if (MALAYSIA_COORDS[lower]) return MALAYSIA_COORDS[lower];
+  // Try partial match — e.g. "Jalan PJU 1/1, Petaling Jaya" should match "petaling jaya"
+  for (const [key, coords] of Object.entries(MALAYSIA_COORDS)) {
+    if (lower.includes(key)) return coords;
+  }
+  return null;
+}
 
 // ─────────────────────────────────────────────
 // GEMINI AI ANALYSIS
@@ -19,34 +75,110 @@ async function analyzeWithGemini(messageText) {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   const prompt = `
-You are an AI assistant for LaporKita, a Malaysian community complaint management system.
-Analyze the following complaint message and return ONLY a valid JSON object.
-Do not include any explanation, markdown, or text outside the JSON.
+You are an AI assistant for LaporKita, a Malaysian community complaint management system serving both residential condos and public neighbourhoods (taman perumahan).
+Analyze the complaint and return ONLY valid JSON. No explanation, no markdown, no text outside JSON.
 
-Message: ${messageText}
+Message: "${messageText}"
 
-Return this exact JSON structure:
+Return exactly this JSON structure:
 {
-  "urgency": "CRITICAL | HIGH | MEDIUM | LOW",
-  "category": "infrastructure | safety | health | environment | general",
-  "sentiment": "distressed | frustrated | neutral | informational",
-  "keywords": ["keyword1", "keyword2"],
-  "location": "extracted location or empty string",
-  "summary": "one sentence English summary",
-  "action_suggested": "brief recommended action"
+  "urgency": "CRITICAL or HIGH or MEDIUM or LOW",
+  "category": "infrastructure or safety or waste or noise or environment or facilities or general",
+  "sentiment": "distressed or frustrated or neutral or informational",
+  "keywords": ["keyword1", "keyword2", "keyword3"],
+  "location": "most specific location mentioned, or empty string if none",
+  "summary": "one sentence English summary of the complaint",
+  "action_suggested": "specific recommended action for the community manager"
 }
 
-Urgency: CRITICAL=immediate danger, HIGH=significant disruption,
-MEDIUM=needs attention soon, LOW=minor inconvenience.
-Message may be Malay, English, or mixed Manglish. Understand all three.
+━━━ CATEGORY — pick the single best match ━━━
+- infrastructure → roads/jalan berlubang, drains/longkang, streetlights/lampu jalan, lifts/lif, pipes/paip, bridges/jambatan, electricity/elektrik, buildings
+- safety → crime/kecurian, stray animals/anjing liar, dangerous structures, fire/api, suspicious people, accidents, broken CCTV/gate
+- waste → rubbish/sampah not collected, illegal dumping, overflowing bins, littering, chemical waste disposal
+- noise → loud music, renovation noise, machinery, barking dogs, late-night disturbance, karaoke
+- environment → river/sungai pollution, air/smoke pollution, fallen trees/pokok tumbang, landslide/tanah runtuh, flooding from rain
+- facilities → playgrounds/taman permainan, community halls/dewan, gyms, pools/kolam renang, wifi, surau, public toilets/tandas
+- general → anything not fitting above
 
-LOCATION EXTRACTION GUIDELINES:
-- Extract the most specific location mentioned in the message
-- Include taman names (e.g. "Taman Melati"), street names (e.g. "Jalan PJU 1/1")
-- Include block or unit references (e.g. "Block B", "Blok A", "Level 3")
-- If only a general area is mentioned (e.g. "near playground"), extract that
-- If NO location is mentioned at all, return empty string ""
-- Format: most specific location first (e.g. "Blok A, Taman Maju" or "Jalan Mawar")
+━━━ URGENCY — read carefully, this matters most ━━━
+
+CRITICAL — life-threatening, respond within 1 hour:
+✓ Gas leak / bau gas
+✓ Fire / api / kebakaran
+✓ Flooding WITH electrocution risk (water + exposed wires)
+✓ Structural collapse imminent (tiang nak roboh, jambatan crack)
+✓ Person trapped (dalam lif, dalam bangunan)
+✓ Violent crime in progress RIGHT NOW
+✓ Chemical/toxic waste spill with immediate health risk
+✓ Medical emergency in public area
+SIGNALS: "sekarang", "bahaya", "tolong cepat", "emergency", "!!!!", multiple 🚨
+
+HIGH — serious disruption, respond same day:
+✓ Lift broken 24h+ AND elderly/disabled affected
+✓ Main water pipe burst flooding multiple units/homes
+✓ Complete power outage affecting whole block/area
+✓ Stray animal ALREADY attacked/bit someone
+✓ Large pothole ALREADY caused accidents this week
+✓ Flooding entering homes (banjir masuk rumah)
+✓ Rubbish not collected 7+ days (health risk, tikus/rats mentioned)
+✓ CCTV/main gate fully broken at night
+✓ Fallen tree blocking main road
+✓ Ongoing crime (break-ins reported multiple times this week)
+SIGNALS: "dah X hari/minggu", "dah accident", "dah kena gigit", "masuk rumah", "semua orang"
+
+MEDIUM — inconvenient, needs response within 2-3 days:
+✓ Single streetlight out (no accident yet)
+✓ Drain clogged, minor pooling on road (NOT entering homes)
+✓ Rubbish bin overflowing (collected within last 7 days)
+✓ Noise complaint from neighbour
+✓ Broken playground equipment (no injury yet)
+✓ Pool dirty or not cleaned
+✓ Broken gym equipment (treadmill, weights)
+✓ Surau/toilet facilities not working
+✓ Suspicious loitering (no active crime)
+✓ Pothole (no accidents reported yet)
+✓ Single lift broken but second lift still working
+✓ Swimming pool water looks dirty/green
+✓ Community hall/dewan aircon broken
+✓ Wifi not working in community centre
+
+NOT MEDIUM — these are LOW (do not upgrade these):
+✗ Faded/worn road markings or speed bumps → LOW
+✗ Blurry or tilted road mirrors → LOW
+✗ Overgrown grass or bushes → LOW
+✗ Faded paint on walls or signs → LOW
+✗ Suggestion or feedback with no safety risk → LOW
+✗ Single bench broken in park (not causing injury) → LOW
+
+SIGNALS for MEDIUM: "dah seminggu", "tak best", "tolong tengok", single 😡, moderate complaint tone
+
+LOW — minor, schedule for next maintenance cycle:
+✓ Faded speed bump markings (drivers can still see it)
+✓ Blurry or slightly tilted road mirror
+✓ Overgrown grass or tree branches (not blocking path)
+✓ Faded paint on walls, signs, or road markings  
+✓ Single light bulb out in non-critical area
+✓ Suggestion or improvement idea (no safety issue)
+✓ Minor corridor cleanliness (not health risk)
+✓ Broken bench in park (can sit elsewhere)
+✓ Signboard fallen or faded
+
+NOT LOW — these are MEDIUM (do not downgrade these):
+✗ Rubbish not collected 7+ days → MEDIUM
+✗ Pool water green/dirty → MEDIUM  
+✗ Gym equipment broken → MEDIUM
+✗ Community hall aircon broken → MEDIUM
+✗ Surau facilities broken → MEDIUM
+
+SIGNALS for LOW: "sikit je", "cadangan", "bila ada masa", "minor", polite tone, no urgency words
+━━━ SPECIAL RULES ━━━
+1. Typos are normal — "smapah"=sampah, "bnajir"=banjir, "gelpak"=gelap, "longkng"=longkang
+2. Emoji signal urgency: 🚨🔴 = CRITICAL/HIGH, 😡😤 = HIGH/MEDIUM, 😰😟 = MEDIUM, 😊 = LOW
+3. "dah lama" / "dah X minggu" (2+ weeks) → upgrade one level (MEDIUM→HIGH)
+4. Multiple exclamation !!! → upgrade one level
+5. If injury/accident ALREADY happened → minimum HIGH
+6. ALL-CAPS words → higher urgency signal
+7. Messages in Malay, English, Manglish, or mixed with Chinese are all valid — understand all
   `;
 
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -133,7 +265,7 @@ async function checkForClusters(newReportId, analysisData) {
     status: 'open',
     title: `Multiple ${analysisData.category} complaints`,
     summary: `${allRelated.length} related ${analysisData.category} complaints detected`,
-    updated_at: admin.firestore.FieldValue.serverTimestamp(),
+    updated_at: FieldValue.serverTimestamp(), // ← fixed
   };
 
   let clusterId;
@@ -145,7 +277,7 @@ async function checkForClusters(newReportId, analysisData) {
   } else {
     const ref = await db.collection('clusters').add({
       ...clusterData,
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
+      created_at: FieldValue.serverTimestamp(), // ← fixed
     });
     clusterId = ref.id;
     console.log(`✅ Created new cluster: ${clusterId}`);
@@ -162,8 +294,50 @@ async function checkForClusters(newReportId, analysisData) {
 }
 
 // ─────────────────────────────────────────────
-// EXPORTED FUNCTION: Analyze single report by ID
-// Usage: /analyzeReport?id=YOUR_DOCUMENT_ID
+// SEND AUTHORITY ALERT
+// Sends WhatsApp to authority for CRITICAL or HIGH complaints
+// ─────────────────────────────────────────────
+async function sendAuthorityAlert(reportId, analysis) {
+  const urgency = analysis.urgency;
+  if (urgency !== 'CRITICAL' && urgency !== 'HIGH') return;
+
+  const authorityNumber = process.env.AUTHORITY_WHATSAPP;
+  if (!authorityNumber) {
+    console.warn('⚠️ AUTHORITY_WHATSAPP not set in .env — skipping alert');
+    return;
+  }
+
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const fromNumber = process.env.TWILIO_WHATSAPP_NUMBER;
+  const client = twilio(accountSid, authToken);
+
+  const urgencyEmoji = urgency === 'CRITICAL' ? '🚨' : '⚠️';
+
+  const message =
+    `${urgencyEmoji} *LaporKita Alert — ${urgency} Priority*\n\n` +
+    `📍 Location: ${analysis.location || 'Not specified'}\n` +
+    `📂 Category: ${analysis.category}\n` +
+    `📝 Summary: ${analysis.summary}\n` +
+    `💡 Action: ${analysis.action_suggested}\n` +
+    `🔖 Report ID: ${reportId.substring(0, 6).toUpperCase()}\n\n` +
+    `Please review on the LaporKita dashboard:\n` +
+    `https://laporkita-ai-e314b.web.app`;
+
+  try {
+    await client.messages.create({
+      from: fromNumber,
+      to: authorityNumber,
+      body: message,
+    });
+    console.log(`🚨 Authority alert sent for report ${reportId} (${urgency})`);
+  } catch (err) {
+    console.error('Failed to send authority alert:', err.message);
+  }
+}
+
+// ─────────────────────────────────────────────
+// EXPORTED: Analyze single report by ID
 // ─────────────────────────────────────────────
 exports.analyzeReport = functions.https.onRequest(async (req, res) => {
   const reportId = req.query.id;
@@ -176,15 +350,14 @@ exports.analyzeReport = functions.https.onRequest(async (req, res) => {
   const analysis = await analyzeWithGemini(doc.data().message);
   await ref.update({
     ...analysis,
-    analyzed_at: admin.firestore.FieldValue.serverTimestamp()
+    analyzed_at: FieldValue.serverTimestamp() // ← fixed
   });
 
   res.json({ success: true, reportId, analysis });
 });
 
 // ─────────────────────────────────────────────
-// EXPORTED FUNCTION: Analyze ALL reports
-// Usage: visit /analyzeAllPending in browser
+// EXPORTED: Analyze ALL reports
 // ─────────────────────────────────────────────
 exports.analyzeAllPending = functions.https.onRequest(async (req, res) => {
   const snapshot = await db.collection('reports').get();
@@ -205,7 +378,7 @@ exports.analyzeAllPending = functions.https.onRequest(async (req, res) => {
 
       await doc.ref.update({
         ...analysis,
-        analyzed_at: admin.firestore.FieldValue.serverTimestamp()
+        analyzed_at: FieldValue.serverTimestamp() // ← fixed
       });
 
       results.push({
@@ -229,8 +402,7 @@ exports.analyzeAllPending = functions.https.onRequest(async (req, res) => {
 });
 
 // ─────────────────────────────────────────────
-// EXPORTED FUNCTION: Manually trigger clustering
-// Usage: visit /runClustering in browser
+// EXPORTED: Manually trigger clustering
 // ─────────────────────────────────────────────
 exports.runClustering = functions.https.onRequest(async (req, res) => {
   const snapshot = await db.collection('reports')
@@ -258,13 +430,18 @@ exports.runClustering = functions.https.onRequest(async (req, res) => {
 });
 
 // ─────────────────────────────────────────────
-// EXPORTED FUNCTION: WhatsApp Webhook
-// Twilio calls this when a WhatsApp message arrives
+// EXPORTED: WhatsApp Webhook
 // ─────────────────────────────────────────────
 exports.whatsappWebhook = functions.https.onRequest(async (req, res) => {
   try {
     const incomingMessage = req.body.Body;
     const senderNumber = req.body.From;
+
+    // Ignore Twilio status callbacks with no message body
+    if (!incomingMessage || !senderNumber) {
+      console.log('Ignoring empty callback from Twilio');
+      return res.status(200).send('OK');
+    }
 
     console.log(`📨 New message from ${senderNumber}: "${incomingMessage}"`);
 
@@ -275,26 +452,22 @@ exports.whatsappWebhook = functions.https.onRequest(async (req, res) => {
       urgency: 'ANALYZING',
       category: 'ANALYZING',
       cluster_id: '',
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      timestamp: FieldValue.serverTimestamp(), // ← fixed
     });
 
     console.log(`✅ Saved report: ${reportRef.id}`);
 
-    // Count Malay word matches — need at least 2 matches to confirm Malay
-    // This prevents single accidental matches (e.g. "air" in "repair")
+    // Detect language — require 2+ Malay words to avoid false positives
     const malayWords = ['rosak', 'tolong', 'dah', 'tak', 'nak', 'saya',
-      'kat', 'dengan', 'untuk', 'boleh', 'longkang',
-      'lampu', 'jalan', 'rumah', 'blok', 'paip', 'busuk',
-      'tersumbat', 'melimpah', 'bertakung', 'depan', 'belakang'];
+      'kat', 'dengan', 'untuk', 'boleh', 'longkang', 'lampu',
+      'jalan', 'rumah', 'blok', 'paip', 'busuk', 'tersumbat',
+      'melimpah', 'bertakung', 'depan', 'belakang'];
 
-    const messageLower = incomingMessage.toLowerCase();
-
-    // Split into words to avoid partial matches (e.g. "air" inside "repair")
-    const messageWords = messageLower.split(/\s+/);
+    const messageWords = incomingMessage.toLowerCase().split(/\s+/);
     const malayMatchCount = malayWords.filter(word => messageWords.includes(word)).length;
     const isMalay = malayMatchCount >= 2;
 
-    console.log(`Language detection: ${malayMatchCount} Malay words found → ${isMalay ? 'Malay' : 'English'}`);
+    console.log(`🌐 Language: ${malayMatchCount} Malay words → ${isMalay ? 'Malay' : 'English'}`);
 
     const replyMessage = isMalay
       ? 'Terima kasih! Aduan anda sedang dianalisis oleh AI kami.\nReport ID: ' + reportRef.id.substring(0, 6).toUpperCase()
@@ -304,12 +477,23 @@ exports.whatsappWebhook = functions.https.onRequest(async (req, res) => {
     twiml.message(replyMessage);
     res.type('text/xml').send(twiml.toString());
 
+    // Background: analyze + alert + cluster
     analyzeWithGemini(incomingMessage).then(async analysis => {
+      // Convert location string → lat/lng for the map
+      const coords = getCoordinates(analysis.location);
+
       await reportRef.update({
         ...analysis,
-        analyzed_at: admin.firestore.FieldValue.serverTimestamp()
+        analyzed_at: FieldValue.serverTimestamp(), // ← fixed
+        ai_processed: true,        // ← ADD THIS LINE
+        status: 'processed',       // ← ADD THIS LINE
+        // Add coordinates if we found them — this is what the map reads
+        latitude: coords ? coords.lat : null,
+        longitude: coords ? coords.lng : null,
       });
       console.log(`🤖 Analysis done for ${reportRef.id}: ${analysis.urgency}`);
+
+      await sendAuthorityAlert(reportRef.id, analysis);
 
       const clusterId = await checkForClusters(reportRef.id, analysis);
       if (clusterId) {

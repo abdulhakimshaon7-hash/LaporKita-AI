@@ -1,4 +1,4 @@
-// File: app/laporkita_dashboard/lib/widgets/critical_alerts.dart
+// File: laporkita_dashboard/lib/widgets/critical_alerts.dart
 // Shows CRITICAL and HIGH urgency unresolved reports prominently
 
 import 'package:flutter/material.dart';
@@ -6,23 +6,43 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CriticalAlerts extends StatelessWidget {
   const CriticalAlerts({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('reports')
-          .where('urgency', whereIn: ['CRITICAL', 'HIGH'])  // Only critical/high
-          .where('status', whereIn: ['pending', 'analyzed']) // Only unresolved
-          .orderBy('timestamp', descending: true)            // Newest first
-          .limit(10)                                         // Max 10 alerts
+          .where('urgency', whereIn: ['CRITICAL', 'HIGH'])
+          // No orderBy — avoids composite index requirement that causes flickering
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+
+        if (snapshot.hasError) {
+          return Text('Error loading alerts: ${snapshot.error}');
+        }
+
+        // Filter out resolved reports client-side
+        final alerts = snapshot.hasData
+            ? snapshot.data!.docs.where((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                return data['status'] != 'resolved';
+              }).toList()
+            : <QueryDocumentSnapshot>[];
+
+        // Sort newest first client-side
+        alerts.sort((a, b) {
+          final aTime = (a.data() as Map<String, dynamic>)['timestamp'];
+          final bTime = (b.data() as Map<String, dynamic>)['timestamp'];
+          if (aTime == null && bTime == null) return 0;
+          if (aTime == null) return 1;
+          if (bTime == null) return -1;
+          return (bTime as Timestamp).compareTo(aTime as Timestamp);
+        });
+
+        if (alerts.isEmpty) {
           return Card(
             color: Colors.green[50],
             child: const ListTile(
@@ -32,15 +52,11 @@ class CriticalAlerts extends StatelessWidget {
             ),
           );
         }
-        
-        // Show a card for each critical/high alert
+
         return Column(
-          children: snapshot.data!.docs.map((doc) {
+          children: alerts.take(10).map((doc) {
             final data = doc.data() as Map<String, dynamic>;
-            return AlertCard(
-              reportId: doc.id,
-              data: data,
-            );
+            return AlertCard(reportId: doc.id, data: data);
           }).toList(),
         );
       },
@@ -51,14 +67,14 @@ class CriticalAlerts extends StatelessWidget {
 class AlertCard extends StatelessWidget {
   final String reportId;
   final Map<String, dynamic> data;
-  
+
   const AlertCard({super.key, required this.reportId, required this.data});
-  
+
   @override
   Widget build(BuildContext context) {
     final isCritical = data['urgency'] == 'CRITICAL';
     final color = isCritical ? Colors.red : Colors.orange;
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       color: isCritical ? Colors.red[50] : Colors.orange[50],
@@ -91,22 +107,34 @@ class AlertCard extends StatelessWidget {
                 data['category'].toString().toUpperCase(),
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
+            const Spacer(),
+            if (data['location'] != null && data['location'] != '')
+              Row(
+                children: [
+                  Icon(Icons.location_on, size: 12, color: Colors.grey[500]),
+                  const SizedBox(width: 2),
+                  Text(
+                    data['location'],
+                    style: TextStyle(color: Colors.grey[500], fontSize: 11),
+                  ),
+                ],
+              ),
           ],
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 4),
-            // Show the summary if available, otherwise the raw message
             Text(
               data['summary'] ?? data['message'] ?? 'No message',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 4),
-            if (data['recommended_action'] != null)
+            // Fixed: was 'recommended_action', now correctly 'action_suggested'
+            if (data['action_suggested'] != null)
               Text(
-                '💡 ${data['recommended_action']}',
+                '💡 ${data['action_suggested']}',
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -114,23 +142,21 @@ class AlertCard extends StatelessWidget {
           ],
         ),
         trailing: ElevatedButton(
-          onPressed: () => _markInProgress(reportId),
+          onPressed: () => _markResolved(reportId),
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
             foregroundColor: Colors.white,
           ),
-          child: const Text('Take Action'),
+          child: const Text('Resolve'),
         ),
         isThreeLine: true,
       ),
     );
   }
-  
-  // Update report status to "in_progress"
-  Future<void> _markInProgress(String id) async {
-    await FirebaseFirestore.instance
-        .collection('reports')
-        .doc(id)
-        .update({'status': 'in_progress'});
+
+  Future<void> _markResolved(String id) async {
+    await FirebaseFirestore.instance.collection('reports').doc(id).update({
+      'status': 'resolved',
+    });
   }
 }

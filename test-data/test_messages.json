@@ -1,0 +1,802 @@
+[
+  {
+    "id": 1,
+    "message": "lampu jlan kt Taman Desa, KL dah rosak 1 minggu! gelpak sangat mlam ni",
+    "sender": "whatsapp:+60163342608",
+    "timestamp": "2026-02-19T00:13:18.322540",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 2,
+    "message": "Drain cover hilang kt Batu Caves. Lubang besar, bahaya kalau orang jalan malam",
+    "sender": "whatsapp:+60168187926",
+    "timestamp": "2026-02-13T11:13:18.322563",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 3,
+    "message": "Jambatan Damansara Damai crack besar dah nampak, takut roboh, please close asap",
+    "sender": "whatsapp:+60143320821",
+    "timestamp": "2026-02-14T08:13:18.322569",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 4,
+    "message": "Anjing liar garang serang orang kt Jalan Ipoh, KL! 2 orang dah kena gigit minggu ni. Bahaya!",
+    "sender": "whatsapp:+60112839607",
+    "timestamp": "2026-02-20T03:13:18.322573",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 5,
+    "message": "Daun kering berterabur kt Cheras Batu 9, buat jalan nampak tak kemas. Mintak bancuh",
+    "sender": "whatsapp:+60182065818",
+    "timestamp": "2026-02-16T11:13:18.322577",
+    "expected_category": "waste",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 6,
+    "message": "Tong sampah kat Shah Alam Seksyen 7 dah penuh dan tak ada replacement. Sampah melimpah",
+    "sender": "whatsapp:+60199877065",
+    "timestamp": "2026-02-18T06:13:18.322580",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 7,
+    "message": "Kerusi kat bus stop Taman Melati, Kuala Lumpur dah longgar sikit. Mintak repair bila ada masa",
+    "sender": "whatsapp:+60125476583",
+    "timestamp": "2026-02-10T03:13:18.322583",
+    "expected_category": "infrastructure",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 8,
+    "message": "Tandas awam kat Subang Jaya USJ air tak jalan dah seminggu. Sangat kotor dan bau",
+    "sender": "whatsapp:+60125924115",
+    "timestamp": "2026-02-16T18:13:18.322586",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 9,
+    "message": "eh jiran i buang sampah kt longkang Bandar Tun Razak je. buat org lain kena banjir. report lah",
+    "sender": "whatsapp:+60115418934",
+    "timestamp": "2026-02-14T18:13:18.322589",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 10,
+    "message": "Road sign kt Segambut dah terbalik, confuse pemandu. Boleh betulkan?",
+    "sender": "whatsapp:+60126007072",
+    "timestamp": "2026-02-09T03:13:18.322592",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 11,
+    "message": "Can someone fix the road at Segambut? Big pothole near the junction, already 3 accidents this month",
+    "sender": "whatsapp:+60143564217",
+    "timestamp": "2026-02-17T18:13:18.322595",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 12,
+    "message": "Sungai kt Batu Caves bertukar warna coklat pekat! Ada kilang buang habuan kot. Urgent!",
+    "sender": "whatsapp:+60116438436",
+    "timestamp": "2026-02-15T23:13:18.322600",
+    "expected_category": "environment",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 13,
+    "message": "Tiang letrik tercabut pasal ribut tadi kt Puchong Jaya. Api nampak keluar! Bahaya!",
+    "sender": "whatsapp:+60176159230",
+    "timestamp": "2026-02-19T22:13:18.322603",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 14,
+    "message": "💧💧 paip pecah kt Wangsa Maju dah 2 hari. Air membazir sangat. tolongg fix",
+    "sender": "whatsapp:+60122437026",
+    "timestamp": "2026-02-11T08:13:18.322608",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 15,
+    "message": "saya nak report pasal jalan kt Jalan Ipoh, KL yang berlubang besar. dah lama sangat dah ni. terima kasih",
+    "sender": "whatsapp:+60133154051",
+    "timestamp": "2026-02-12T08:13:18.322611",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 16,
+    "message": "Sampah berterabur kt Batu Caves selepas weekend market. Boleh hantar cleaner?",
+    "sender": "whatsapp:+60135446912",
+    "timestamp": "2026-02-14T04:13:18.322616",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 17,
+    "message": "Ada bekas makanan seminggu kt lorong Ampang Jaya. Bau je. Siapa yang patut kutip ni?",
+    "sender": "whatsapp:+60144374754",
+    "timestamp": "2026-02-11T14:13:18.322619",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 18,
+    "message": "Court badminton Setapak lampu separuh mati. Tak boleh main malam",
+    "sender": "whatsapp:+60178350099",
+    "timestamp": "2026-02-14T09:13:18.322622",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 19,
+    "message": "Hello, I would like to report that the rubbish at Puchong Jaya has not been collected for 2 weeks already. Thank you",
+    "sender": "whatsapp:+60144769795",
+    "timestamp": "2026-02-21T13:13:18.322625",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 20,
+    "message": "Someone dumping rubbish every night at Taman Melati, Kuala Lumpur. CCTV takleh capture, dah 2 minggu ni",
+    "sender": "whatsapp:+60144694634",
+    "timestamp": "2026-02-22T21:13:18.322630",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 21,
+    "message": "😰 takut nak jalan malam kt Bukit Jalil. gelap sangat, takde lampu. pls fix",
+    "sender": "whatsapp:+60114841005",
+    "timestamp": "2026-02-21T22:13:18.322634",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 22,
+    "message": "Speaker masjid Subang Jaya USJ nampak rosak, bunyi distorted. Boleh check?",
+    "sender": "whatsapp:+60129626108",
+    "timestamp": "2026-02-19T15:13:18.322636",
+    "expected_category": "noise",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 23,
+    "message": "bnajir kecil kt dpn umah Pandan Indah pasal longkang trsumbat",
+    "sender": "whatsapp:+60194594297",
+    "timestamp": "2026-02-14T19:13:18.322639",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 24,
+    "message": "Air longkang Cyberjaya berbau mcm chemical. Ikan2 pun dah mati. Ada pencemaran",
+    "sender": "whatsapp:+60195076817",
+    "timestamp": "2026-02-10T08:13:18.322642",
+    "expected_category": "environment",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 25,
+    "message": "😡 Sampah kt Ampang Jaya dah 2 minggu tak kutip. Bau busuk masuk rumah. TOLONGLAH",
+    "sender": "whatsapp:+60142582524",
+    "timestamp": "2026-02-21T02:13:18.322647",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 26,
+    "message": "Tiang letrik nak roboh dah!!! Berbahaya sangat, ada kanak-kanak main dekat sini 😱 Ampang Jaya",
+    "sender": "whatsapp:+60178106470",
+    "timestamp": "2026-02-16T09:13:18.322650",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 27,
+    "message": "Ada orang buang bahan kimia haram kt Cyberjaya!! Bau sangat kuat dan warna pelik. BAHAYA!",
+    "sender": "whatsapp:+60112651177",
+    "timestamp": "2026-02-22T11:13:18.322653",
+    "expected_category": "waste",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 28,
+    "message": "Speed bump kt Cyberjaya dah haus, driver bawak laju je sekarang. Boleh repaint?",
+    "sender": "whatsapp:+60172833230",
+    "timestamp": "2026-02-19T17:13:18.322656",
+    "expected_category": "safety",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 29,
+    "message": "ok so the playground at Kepong Baru - the slide is broken and sharp edges nampak. children playing there!",
+    "sender": "whatsapp:+60193351868",
+    "timestamp": "2026-02-16T18:13:18.322659",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 30,
+    "message": "Sampah medical waste dibuang tepi jalan kt Taman Connaught. Nampak jarum dan glove! Berbahaya!",
+    "sender": "whatsapp:+60195191056",
+    "timestamp": "2026-02-09T21:13:18.322662",
+    "expected_category": "waste",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 31,
+    "message": "ada kecurian kt kawasn Bandar Tun Razak tadi, tolong polis",
+    "sender": "whatsapp:+60121848731",
+    "timestamp": "2026-02-12T06:13:18.322665",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 32,
+    "message": "Lif blok A rosak dah 4 hari di Taman Melati, Kuala Lumpur. Orang tua & OKU tak boleh naik turun langsung",
+    "sender": "whatsapp:+60124965789",
+    "timestamp": "2026-02-20T10:13:18.322668",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 33,
+    "message": "smapah tak kuti dekat Bangsar South dah lama. bau busuk gle",
+    "sender": "whatsapp:+60194586084",
+    "timestamp": "2026-02-09T11:13:18.322670",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 34,
+    "message": "Factory baru kt SS2, Petaling Jaya operasi 24 jam, bunyi mesin buat kepala pening. Tak boleh tahan dah",
+    "sender": "whatsapp:+60137358113",
+    "timestamp": "2026-02-22T11:13:18.322673",
+    "expected_category": "noise",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 35,
+    "message": "Pokok-pokok kt taman Taman Connaught dah lama tak dipotong. Nampak tidak kemas",
+    "sender": "whatsapp:+60195785687",
+    "timestamp": "2026-02-16T01:13:18.322676",
+    "expected_category": "environment",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 36,
+    "message": "Paip air pecah kt depan rumah Cyberjaya. Air membazir dah 3 hari, dah report tapi takde response",
+    "sender": "whatsapp:+60193597059",
+    "timestamp": "2026-02-19T14:13:18.322678",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 37,
+    "message": "Lampu jalan dah rosak 2 minggu dekat Kepong Baru. Gelap gila mlm ni, takut crime berlaku",
+    "sender": "whatsapp:+60112022698",
+    "timestamp": "2026-02-11T13:13:18.322681",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 38,
+    "message": "Sampah bertimbun kt depan sekolah SS2, Petaling Jaya. Budak-budak berjalan kat situ. Tak selamat",
+    "sender": "whatsapp:+60118999183",
+    "timestamp": "2026-02-14T07:13:18.322684",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 39,
+    "message": "噪音投诉：Cheras Batu 9 的工厂夜间很吵。Could someone look into this?",
+    "sender": "whatsapp:+60119519948",
+    "timestamp": "2026-02-21T18:13:18.322687",
+    "expected_category": "noise",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 40,
+    "message": "Tong sampah komuniti Jalan Ipoh, KL tak dikutip dah 10 hari! Melimpah dah, bau busuk, tikus ada",
+    "sender": "whatsapp:+60124946066",
+    "timestamp": "2026-02-16T20:13:18.322690",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 41,
+    "message": "Anjing jiran menggonggong sepanjang malam kt Gombak. Dah 1 bulan, tak boleh tido",
+    "sender": "whatsapp:+60141666754",
+    "timestamp": "2026-02-13T21:13:18.322693",
+    "expected_category": "noise",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 42,
+    "message": "Pencuri masuk kereta kt parking Ampang Jaya semalam. Cermin pecah, radio hilang",
+    "sender": "whatsapp:+60175374922",
+    "timestamp": "2026-02-19T02:13:18.322696",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 43,
+    "message": "Signboard taman Bukit Jalil dah fade, susah nak baca. Perlu update",
+    "sender": "whatsapp:+60175004485",
+    "timestamp": "2026-02-18T11:13:18.322698",
+    "expected_category": "infrastructure",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 44,
+    "message": "Banjir teruk masuk rumah di Taman Desa, KL! Air dah sampai lutut, tolong hantar bantuan segera!!!",
+    "sender": "whatsapp:+60168670955",
+    "timestamp": "2026-02-17T21:13:18.322701",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 45,
+    "message": "banjir kilat teruk gila tadi kt Taman Melati, Kuala Lumpur. kereta i dah lemas 😭 tolong la buat sesuatu",
+    "sender": "whatsapp:+60192677407",
+    "timestamp": "2026-02-21T06:13:18.322705",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 46,
+    "message": "Orang suspicious bawak senjata nampak kt Kepong Baru!! Tolong polis sekarang!",
+    "sender": "whatsapp:+60163222252",
+    "timestamp": "2026-02-17T21:13:18.322708",
+    "expected_category": "safety",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 47,
+    "message": "Street light kat Wangsa Maju semua mati. Dah 1 week, kawasan gelap sangat malam",
+    "sender": "whatsapp:+60175781295",
+    "timestamp": "2026-02-20T09:13:18.322710",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 48,
+    "message": "Budak-budak main basketball malam2 kt court Batu Caves. Sikit bising. Boleh letak signage?",
+    "sender": "whatsapp:+60169874152",
+    "timestamp": "2026-02-22T02:13:18.322713",
+    "expected_category": "noise",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 49,
+    "message": "Weh drain dekat Batu Caves mmg dah overflow time hujan je. Tiap kali hujan banjir. Fix la pls",
+    "sender": "whatsapp:+60162737893",
+    "timestamp": "2026-02-20T15:13:18.322716",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 50,
+    "message": "Swimming pool Puchong Jaya air nampak hijau! Dah berapa lama tak tukar air? Tak selamat berenang",
+    "sender": "whatsapp:+60123607983",
+    "timestamp": "2026-02-18T14:13:18.322719",
+    "expected_category": "facilities",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 51,
+    "message": "Pokok renek kt Shah Alam Seksyen 7 dah panjang masuk jalan sikit. Boleh trim?",
+    "sender": "whatsapp:+60146752576",
+    "timestamp": "2026-02-19T02:13:18.322721",
+    "expected_category": "infrastructure",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 52,
+    "message": "Illegal dumping besar-besaran kt hutan simpan Klang Jalan Meru. Ada TV, tilam, segala. Tolong ambik",
+    "sender": "whatsapp:+60169479356",
+    "timestamp": "2026-02-15T15:13:18.322724",
+    "expected_category": "waste",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 53,
+    "message": "Rempit aktiviti malam2 kt SS2, Petaling Jaya setiap malam. Dah kacau penduduk, accident pun ada",
+    "sender": "whatsapp:+60128106422",
+    "timestamp": "2026-02-09T15:13:18.322727",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 54,
+    "message": "Bench kat taman SS2, Petaling Jaya dah patah, berbahaya untuk duduk. Tolong repair",
+    "sender": "whatsapp:+60116596150",
+    "timestamp": "2026-02-10T19:13:18.322730",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 55,
+    "message": "Attention: Flooding issue at Klang Jalan Meru getting worse every rain. Need drainage upgrade urgently.",
+    "sender": "whatsapp:+60163710895",
+    "timestamp": "2026-02-11T09:13:18.322732",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 56,
+    "message": "Renovation haram 7 pagi di Batu Caves! Bunyi drill kuat gila. Semua tak boleh tido",
+    "sender": "whatsapp:+60181162230",
+    "timestamp": "2026-02-21T21:13:18.322735",
+    "expected_category": "noise",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 57,
+    "message": "🐕 anjing liar kt Bukit Jalil garang, dah gigit jiran I semalam. tolong tangkap",
+    "sender": "whatsapp:+60131604451",
+    "timestamp": "2026-02-09T12:13:18.322738",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 58,
+    "message": "Budak-budak main kt construction site Gombak yang tak berpagar. Bahaya sangat!",
+    "sender": "whatsapp:+60138210624",
+    "timestamp": "2026-02-20T22:13:18.322741",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 59,
+    "message": "Gate kawasan Sri Petaling selalu tak kunci malam. Guard pun kadang tak ada. Rasa risau",
+    "sender": "whatsapp:+60171669324",
+    "timestamp": "2026-02-17T17:13:18.322743",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 60,
+    "message": "Wifi percuma kt community centre Pandan Indah tak jalan dah 2 minggu. Pelajar susah nak study",
+    "sender": "whatsapp:+60142724590",
+    "timestamp": "2026-02-17T06:13:18.322747",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 61,
+    "message": "Motor dipark block entrance Ampang Jaya. Kalau emergency susah nak masuk. Tolong act",
+    "sender": "whatsapp:+60134971793",
+    "timestamp": "2026-02-09T18:13:18.322749",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 62,
+    "message": "Sikit je sampah kt taman Cheras Batu 9 tapi bersepah. Boleh sweeping sekejap?",
+    "sender": "whatsapp:+60181415846",
+    "timestamp": "2026-02-20T00:13:18.322752",
+    "expected_category": "waste",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 63,
+    "message": "tolong la lampu taman Subang Jaya USJ dah off dari semalam. anak i takut jalan mlm",
+    "sender": "whatsapp:+60185163555",
+    "timestamp": "2026-02-18T18:13:18.322755",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 64,
+    "message": "CCTV kt Bukit Jalil nampak dah rosak/tutup. Kawasan jadi gelap dan rasa tak selamat",
+    "sender": "whatsapp:+60127417985",
+    "timestamp": "2026-02-09T22:13:18.322758",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 65,
+    "message": "Jalan raya berlubang besar dekat Bangsar South dah sebabkan 2 motosikal jatuh minggu ni",
+    "sender": "whatsapp:+60144348276",
+    "timestamp": "2026-02-09T09:13:18.322760",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 66,
+    "message": "Api kecil nampak kt belakang kedai Damansara Damai! Dah call bomba tapi nak report sini jugak",
+    "sender": "whatsapp:+60164818418",
+    "timestamp": "2026-02-19T23:13:18.322763",
+    "expected_category": "safety",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 67,
+    "message": "Library community Pandan Indah dah closed 3 bulan tapi takde notice. Nak guna bila?",
+    "sender": "whatsapp:+60147685149",
+    "timestamp": "2026-02-17T15:13:18.322766",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 68,
+    "message": "Bising gila la construction kt Jalan Ipoh, KL. 6am dah start drill. Sabtu pun sama!! 😤😤",
+    "sender": "whatsapp:+60166891254",
+    "timestamp": "2026-02-12T07:13:18.322769",
+    "expected_category": "noise",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 69,
+    "message": "🚨🚨 BAHAYA! Tiang elektrik nak tumbang kt Setapak! Tolong cepat!! 🚨🚨",
+    "sender": "whatsapp:+60171463060",
+    "timestamp": "2026-02-21T15:13:18.322773",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 70,
+    "message": "Jiran sebelah main muzik kuat setiap malam kt Cheras Batu 9. Boleh tolong tegur?",
+    "sender": "whatsapp:+60161641849",
+    "timestamp": "2026-02-21T04:13:18.322776",
+    "expected_category": "noise",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 71,
+    "message": "Pokok besar kt Ampang Jaya dah condong ke jalan. Ribut semalam buat dia hampir tumbang. Bahaya!",
+    "sender": "whatsapp:+60176262632",
+    "timestamp": "2026-02-16T04:13:18.322778",
+    "expected_category": "environment",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 72,
+    "message": "Lorry besar lalu kt Segambut buat bunyi kuat malam2. Jalan tu supposed residential je",
+    "sender": "whatsapp:+60127462506",
+    "timestamp": "2026-02-13T17:13:18.322781",
+    "expected_category": "noise",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 73,
+    "message": "lif rosak lagi kt Taman Connaught!! 3rd time this month. maintenance mcm tak buat kerja je",
+    "sender": "whatsapp:+60118315831",
+    "timestamp": "2026-02-22T07:13:18.322784",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 74,
+    "message": "Dewan olahraga Batu Caves aircond semua rosak. Panas gila, tak boleh guna",
+    "sender": "whatsapp:+60147110622",
+    "timestamp": "2026-02-16T21:13:18.322787",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 75,
+    "message": "Asap hitam tebal keluar dari kilang haram kt Pandan Indah. Budak2 batuk-batuk dah. Tolong!",
+    "sender": "whatsapp:+60176266630",
+    "timestamp": "2026-02-12T20:13:18.322789",
+    "expected_category": "environment",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 76,
+    "message": "Habuk banyak dari tapak bina Cyberjaya masuk rumah2 penduduk. Dah risau kesihatan",
+    "sender": "whatsapp:+60169508103",
+    "timestamp": "2026-02-18T02:13:18.322792",
+    "expected_category": "environment",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 77,
+    "message": "Playground Ampang Jaya swing dah berkarat sikit. Tak urgent tapi boleh tengok?",
+    "sender": "whatsapp:+60177751158",
+    "timestamp": "2026-02-11T14:13:18.322795",
+    "expected_category": "infrastructure",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 78,
+    "message": "Surau taman Batu Caves paip wudhu tersumbat. Dah 3 hari, solat pun susah",
+    "sender": "whatsapp:+60134218542",
+    "timestamp": "2026-02-16T02:13:18.322797",
+    "expected_category": "facilities",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 79,
+    "message": "Karaoke sampai 2am kt Setapak setiap hujung minggu! Anak-anak tak boleh tido. Dah report banyak kali",
+    "sender": "whatsapp:+60136049101",
+    "timestamp": "2026-02-16T06:13:18.322800",
+    "expected_category": "noise",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 80,
+    "message": "Mirror pandang kt simpang Taman Melati, Kuala Lumpur sudah kabur. Boleh replace?",
+    "sender": "whatsapp:+60165813613",
+    "timestamp": "2026-02-19T10:13:18.322803",
+    "expected_category": "safety",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 81,
+    "message": "ADA ORANG MENCURI KERETA KT Gombak SEKARANG!!! Tolong hantar polis segera!!!!",
+    "sender": "whatsapp:+60178801207",
+    "timestamp": "2026-02-15T09:13:18.322806",
+    "expected_category": "safety",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 82,
+    "message": "Jalan gelap di Pandan Indah malam - rasa tak selamat jalan kaki. Boleh pasang lampu?",
+    "sender": "whatsapp:+60149576076",
+    "timestamp": "2026-02-15T00:13:18.322808",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 83,
+    "message": "Orang buang sampah kt taman permainan Cheras Batu 9 walaupun ada tong sampah sebelah je 🤦",
+    "sender": "whatsapp:+60125761145",
+    "timestamp": "2026-02-14T02:13:18.322812",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 84,
+    "message": "Cat dinding community hall Klang Jalan Meru dah pudar dan comot sikit. Boleh cat balik?",
+    "sender": "whatsapp:+60172566777",
+    "timestamp": "2026-02-09T16:13:18.322814",
+    "expected_category": "infrastructure",
+    "expected_urgency": "LOW"
+  },
+  {
+    "id": 85,
+    "message": "Kiosk bayaran bil kt Pandan Indah rosak. Orang tua tak tahu bayar online, susah dorang",
+    "sender": "whatsapp:+60164768844",
+    "timestamp": "2026-02-10T17:13:18.322817",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 86,
+    "message": "Guard parking Taman Desa, KL kasar dgn penduduk. Dah 2 orang complain, takde action pun",
+    "sender": "whatsapp:+60111775337",
+    "timestamp": "2026-02-19T08:13:18.322819",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 87,
+    "message": "EMERGENCY - gas pipe burst at Shah Alam Seksyen 7!! Bau gas kuat gila, semua orang keluar rumah dah",
+    "sender": "whatsapp:+60128640615",
+    "timestamp": "2026-02-16T03:13:18.322822",
+    "expected_category": "infrastructure",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 88,
+    "message": "Orang dok lepak suspicious kt Gombak setiap malam. Tak buat apa tapi risau juga",
+    "sender": "whatsapp:+60147442089",
+    "timestamp": "2026-02-15T11:13:18.322825",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 89,
+    "message": "Longkang tersumbat kt Wangsa Maju, bau busuk dan nyamuk banyak. Dah lama ni",
+    "sender": "whatsapp:+60131093026",
+    "timestamp": "2026-02-10T20:13:18.322828",
+    "expected_category": "infrastructure",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 90,
+    "message": "Tanah runtuh kecil kt cerun Putrajaya Presint 9 selepas hujan lebat. Jalan dah partially block",
+    "sender": "whatsapp:+60184671545",
+    "timestamp": "2026-02-20T01:13:18.322830",
+    "expected_category": "environment",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 91,
+    "message": "Orang suspicious bawak senjata nampak kt Segambut!! Tolong polis sekarang!",
+    "sender": "whatsapp:+60191842524",
+    "timestamp": "2026-02-14T16:13:18.322833",
+    "expected_category": "safety",
+    "expected_urgency": "CRITICAL"
+  },
+  {
+    "id": 92,
+    "message": "Jalan raya berlubang besar dekat Puchong Jaya dah sebabkan 2 motosikal jatuh minggu ni",
+    "sender": "whatsapp:+60193237058",
+    "timestamp": "2026-02-10T09:13:18.322835",
+    "expected_category": "infrastructure",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 93,
+    "message": "Sampah berterabur kt Pandan Indah selepas weekend market. Boleh hantar cleaner?",
+    "sender": "whatsapp:+60178425149",
+    "timestamp": "2026-02-13T00:13:18.322838",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 94,
+    "message": "Guard parking Segambut kasar dgn penduduk. Dah 2 orang complain, takde action pun",
+    "sender": "whatsapp:+60188481188",
+    "timestamp": "2026-02-20T00:13:18.322843",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 95,
+    "message": "Jalan gelap di Bangsar South malam - rasa tak selamat jalan kaki. Boleh pasang lampu?",
+    "sender": "whatsapp:+60195348512",
+    "timestamp": "2026-02-10T16:13:18.322846",
+    "expected_category": "safety",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 96,
+    "message": "ada kecurian kt kawasn Klang Jalan Meru tadi, tolong polis",
+    "sender": "whatsapp:+60169745959",
+    "timestamp": "2026-02-15T03:13:18.322849",
+    "expected_category": "safety",
+    "expected_urgency": "HIGH"
+  },
+  {
+    "id": 97,
+    "message": "Library community Wangsa Maju dah closed 3 bulan tapi takde notice. Nak guna bila?",
+    "sender": "whatsapp:+60168379837",
+    "timestamp": "2026-02-21T01:13:18.322852",
+    "expected_category": "facilities",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 98,
+    "message": "Anjing jiran menggonggong sepanjang malam kt Sri Petaling. Dah 1 bulan, tak boleh tido",
+    "sender": "whatsapp:+60145558623",
+    "timestamp": "2026-02-17T13:13:18.322854",
+    "expected_category": "noise",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 99,
+    "message": "smapah tak kuti dekat Batu Caves dah lama. bau busuk gle",
+    "sender": "whatsapp:+60123321531",
+    "timestamp": "2026-02-20T16:13:18.322857",
+    "expected_category": "waste",
+    "expected_urgency": "MEDIUM"
+  },
+  {
+    "id": 100,
+    "message": "Tanah runtuh kecil kt cerun Setapak selepas hujan lebat. Jalan dah partially block",
+    "sender": "whatsapp:+60134589533",
+    "timestamp": "2026-02-21T10:13:18.322859",
+    "expected_category": "environment",
+    "expected_urgency": "HIGH"
+  }
+]
