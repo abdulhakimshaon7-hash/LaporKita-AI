@@ -14,7 +14,8 @@ import os
 
 # Path to your Firebase service account key
 # (Download from Firebase Console → Project Settings → Service Accounts)
-SERVICE_ACCOUNT_PATH = "./firebase-service-account.json"
+SERVICE_ACCOUNT_PATH = "/Users/abdulhakimshaon/Desktop/LaporKita-AI/scripts/firebase-service-account.json"
+
 
 # Initialize Firebase (only run this once per script execution)
 if not firebase_admin._apps:

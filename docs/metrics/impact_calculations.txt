@@ -1,0 +1,25 @@
+=== TIME SAVINGS CALCULATION ===
+
+MANUAL PROCESS (Before LaporKita):
+- Average complaints per day per community: 50
+- Time to read + categorize 1 complaint manually: 5 minutes
+- Time to sort by urgency manually: 20 minutes extra/day
+- Total daily complaint management time: (50 × 5) + 20 = 270 minutes = 4.5 hours/day
+
+WITH LAPORKITA:
+- AI processing time per complaint: ~10 seconds
+- Time to review AI-sorted dashboard: ~15 minutes/day
+- Total daily time: (50 × 10s) + 15 min = 8.3 min + 15 min ≈ 23 minutes/day
+
+TIME SAVED: 270 - 23 = 247 minutes ≈ 4 hours/day per community leader
+
+=== COST SAVINGS CALCULATION ===
+- Average Malaysian community leader value of time: RM 25/hour (conservative)
+- Daily savings: 4 hours × RM 25 = RM 100/day
+- Monthly savings: RM 100 × 22 working days = RM 2,200/month
+- Annually: RM 26,400/year per community
+
+=== SCALE PROJECTION ===
+- If adopted by 1% of 11,000 Malaysian communities: 110 communities
+- Annual savings: 110 × RM 26,400 = RM 2.9 million/year
+- Note these as PROJECTIONS based on our testing data

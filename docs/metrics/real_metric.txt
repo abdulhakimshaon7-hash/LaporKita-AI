@@ -1,0 +1,79 @@
+=================================================================
+       🎯  LAPORKITA-AI TESTING METRICS REPORT
+       Generated: 24 February 2026, 03:35 AM
+=================================================================
+
+📊 SECTION 1: VOLUME & PROCESSING
+
+╭──────────────────────────────┬─────────┬────────╮
+│ Metric                       │   Count │ Rate   │
+├──────────────────────────────┼─────────┼────────┤
+│ Total reports submitted      │     100 │ —      │
+│ AI processing successful     │       0 │ 0.0%   │
+│ AI processing failed         │     100 │ 100.0% │
+│ Reports assigned to clusters │      53 │ 53.0%  │
+│ Total clusters detected      │      14 │ —      │
+╰──────────────────────────────┴─────────┴────────╯
+
+⚡ SECTION 2: PERFORMANCE
+
+╭────────────────────┬─────────────────────────┬──────────────────────────────────────╮
+│ Metric             │ Value                   │ Notes                                │
+├────────────────────┼─────────────────────────┼──────────────────────────────────────┤
+│ AI processing time │ ~800-2000ms (estimated) │ Based on Gemini API typical response │
+╰────────────────────┴─────────────────────────┴──────────────────────────────────────╯
+
+🎯 SECTION 3: AI ACCURACY
+
+⚠️  Accuracy not yet measured. See instructions below to add manual verification.
+
+   QUICK WAY TO ADD MANUAL VERIFICATION:
+   1. Open Firestore in browser
+   2. For each test report, add field: manually_verified_urgency = 'HIGH' (or whatever is correct)
+   3. Add field: manually_verified_category = 'infrastructure' (etc.)
+   4. Re-run this script
+
+   OR use your accuracy-results.csv from Stage 6 — see script below!
+
+🚨 SECTION 4: URGENCY DISTRIBUTION
+
+╭─────────────────┬─────────┬──────────────╮
+│ Urgency Level   │ Count   │ % of Total   │
+├─────────────────┼─────────┼──────────────┤
+╰─────────────────┴─────────┴──────────────╯
+
+🏷️  SECTION 5: TOP COMPLAINT CATEGORIES
+
+╭────────────┬─────────┬──────────────╮
+│ Category   │ Count   │ % of Total   │
+├────────────┼─────────┼──────────────┤
+╰────────────┴─────────┴──────────────╯
+
+🗺️  SECTION 6: CLUSTERING INTELLIGENCE
+
+╭──────────────────────────────────┬─────────┬─────────╮
+│ Metric                           │   Value │ Notes   │
+├──────────────────────────────────┼─────────┼─────────┤
+│ Total clusters auto-detected     │    14   │ —       │
+│ Reports grouped into clusters    │    53   │ 53.0%   │
+│ Avg reports per cluster          │     3.8 │ —       │
+│ Standalone (unclustered) reports │    47   │ —       │
+╰──────────────────────────────────┴─────────┴─────────╯
+
+🌐 SECTION 7: MULTILINGUAL SUPPORT
+
+╭────────────────────────────────────────┬─────────┬──────────────╮
+│ Metric                                 │   Count │ % of Total   │
+├────────────────────────────────────────┼─────────┼──────────────┤
+│ Reports with Malay language indicators │       0 │ 0.0%         │
+│ Reports with English language          │     100 │ 100.0%       │
+╰────────────────────────────────────────┴─────────┴──────────────╯
+
+✅ Metrics saved to: ../docs/metrics/metrics_data.json
+   (Use this JSON file in your visualization script next!)
+
+=================================================================
+  🎓 SUBMISSION TIP:
+  Copy the numbers above into your Google Form answers!
+  Key stats judges love: success rate, accuracy %, clusters detected
+=================================================================
