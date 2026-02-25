@@ -3,51 +3,79 @@
        Generated: 24 February 2026, 03:35 AM
 =================================================================
 
+/Users/abdulhakimshaon/Desktop/laporkita-ai/.venv/lib/python3.9/site-packages/google/api_core/_python_version_support.py:246: FutureWarning: You are using a non-supported Python version (3.9.6). Google will not post any further updates to google.api_core supporting this Python version. Please upgrade to the latest Python version, or at least Python 3.10, and then update google.api_core.
+  warnings.warn(message, FutureWarning)
+✅ Connected to Firebase Firestore!
+
+📥 Fetching all reports from Firestore...
+   Found 100 reports total.
+
+📥 Fetching all clusters from Firestore...
+   Found 14 clusters total.
+
+🔢 Calculating metrics...
+
+=================================================================
+       🎯  LAPORKITA-AI TESTING METRICS REPORT
+       Generated: 26 February 2026, 07:52 AM
+=================================================================
+
 📊 SECTION 1: VOLUME & PROCESSING
 
 ╭──────────────────────────────┬─────────┬────────╮
 │ Metric                       │   Count │ Rate   │
 ├──────────────────────────────┼─────────┼────────┤
 │ Total reports submitted      │     100 │ —      │
-│ AI processing successful     │       0 │ 0.0%   │
-│ AI processing failed         │     100 │ 100.0% │
+│ AI processing successful     │     100 │ 100.0% │
+│ AI processing failed         │       0 │ 0.0%   │
 │ Reports assigned to clusters │      53 │ 53.0%  │
 │ Total clusters detected      │      14 │ —      │
 ╰──────────────────────────────┴─────────┴────────╯
 
 ⚡ SECTION 2: PERFORMANCE
 
-╭────────────────────┬─────────────────────────┬──────────────────────────────────────╮
-│ Metric             │ Value                   │ Notes                                │
-├────────────────────┼─────────────────────────┼──────────────────────────────────────┤
-│ AI processing time │ ~800-2000ms (estimated) │ Based on Gemini API typical response │
-╰────────────────────┴─────────────────────────┴──────────────────────────────────────╯
+╭────────────────────┬─────────────────────────┬─────────────────────────────╮
+│ Metric             │ Value                   │ Notes                       │
+├────────────────────┼─────────────────────────┼─────────────────────────────┤
+│ AI processing time │ ~800-2000ms (estimated) │ Gemini API typical response │
+╰────────────────────┴─────────────────────────┴─────────────────────────────╯
 
-🎯 SECTION 3: AI ACCURACY
+🎯 SECTION 3: AI ACCURACY (from accuracy_report.py)
 
-⚠️  Accuracy not yet measured. See instructions below to add manual verification.
-
-   QUICK WAY TO ADD MANUAL VERIFICATION:
-   1. Open Firestore in browser
-   2. For each test report, add field: manually_verified_urgency = 'HIGH' (or whatever is correct)
-   3. Add field: manually_verified_category = 'infrastructure' (etc.)
-   4. Re-run this script
-
-   OR use your accuracy-results.csv from Stage 6 — see script below!
+╭─────────────────────────────┬─────────┬─────────────────────────┬─────────────────────╮
+│ Metric                      │ Value   │ Detail                  │ Status              │
+├─────────────────────────────┼─────────┼─────────────────────────┼─────────────────────┤
+│ Urgency detection accuracy  │ 80.3%   │ 74/94 exact + 1 partial │ ✅ PASS              │
+│ Category accuracy           │ 81.9%   │ 77/94 exact correct     │ ✅ PASS              │
+│ Reports verified            │ 94/94   │ Full dataset verified   │ ✅                   │
+│ Critical/High partial match │ 1/94    │ Erred toward caution    │ ✅ Good failure mode │
+╰─────────────────────────────┴─────────┴─────────────────────────┴─────────────────────╯
 
 🚨 SECTION 4: URGENCY DISTRIBUTION
 
 ╭─────────────────┬─────────┬──────────────╮
-│ Urgency Level   │ Count   │ % of Total   │
+│ Urgency Level   │   Count │ % of Total   │
 ├─────────────────┼─────────┼──────────────┤
+│ CRITICAL        │       9 │ 9.0%         │
+│ HIGH            │      42 │ 42.0%        │
+│ MEDIUM          │      28 │ 28.0%        │
+│ LOW             │       6 │ 6.0%         │
+│ unknown         │      15 │ 15.0%        │
 ╰─────────────────┴─────────┴──────────────╯
 
 🏷️  SECTION 5: TOP COMPLAINT CATEGORIES
 
-╭────────────┬─────────┬──────────────╮
-│ Category   │ Count   │ % of Total   │
-├────────────┼─────────┼──────────────┤
-╰────────────┴─────────┴──────────────╯
+╭────────────────┬─────────┬──────────────╮
+│ Category       │   Count │ % of Total   │
+├────────────────┼─────────┼──────────────┤
+│ Infrastructure │      26 │ 26.0%        │
+│ Waste          │      16 │ 16.0%        │
+│ General        │      16 │ 16.0%        │
+│ Environment    │      13 │ 13.0%        │
+│ Facilities     │      11 │ 11.0%        │
+│ Safety         │      11 │ 11.0%        │
+│ Noise          │       7 │ 7.0%         │
+╰────────────────┴─────────┴──────────────╯
 
 🗺️  SECTION 6: CLUSTERING INTELLIGENCE
 
@@ -65,15 +93,29 @@
 ╭────────────────────────────────────────┬─────────┬──────────────╮
 │ Metric                                 │   Count │ % of Total   │
 ├────────────────────────────────────────┼─────────┼──────────────┤
-│ Reports with Malay language indicators │       0 │ 0.0%         │
-│ Reports with English language          │     100 │ 100.0%       │
+│ Reports with Malay language indicators │      91 │ 91.0%        │
+│ Reports with English language          │       9 │ 9.0%         │
 ╰────────────────────────────────────────┴─────────┴──────────────╯
 
+😊 SECTION 8: SENTIMENT DISTRIBUTION (Bonus!)
+
+╭─────────────┬─────────┬──────────────╮
+│ Sentiment   │   Count │ % of Total   │
+├─────────────┼─────────┼──────────────┤
+│ Frustrated  │      43 │ 43.0%        │
+│ Distressed  │      33 │ 33.0%        │
+│ Neutral     │      24 │ 24.0%        │
+╰─────────────┴─────────┴──────────────╯
+
 ✅ Metrics saved to: ../docs/metrics/metrics_data.json
-   (Use this JSON file in your visualization script next!)
 
 =================================================================
-  🎓 SUBMISSION TIP:
-  Copy the numbers above into your Google Form answers!
-  Key stats judges love: success rate, accuracy %, clusters detected
+  🎓 KEY NUMBERS FOR YOUR SUBMISSION:
+  • Total reports processed:     100
+  • AI success rate:             100.0%
+  • Urgency accuracy:            80.3%  (from accuracy_report.py)
+  • Category accuracy:           81.9%  (from accuracy_report.py)
+  • Clusters detected:           14
+  • Reports grouped in clusters: 53 (53.0%)
 =================================================================
+(.venv) (base) abdulhakimshaon@Abduls-MacBook-Air laporkita-ai % 
