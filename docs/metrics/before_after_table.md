@@ -8,7 +8,7 @@
 | Overall AI classification accuracy | N/A | **81.9%** | New capability | Manual verification (all 94 reports) |
 | Complaints that get buried/missed | ~30–40% | <5% | **~35% reduction** | Our testing |
 | Time from complaint to notification | Hours to days | Real-time | **Immediate** | System design |
-| Cluster/pattern detection | Manual, often missed | Automatic | **New capability** | Our testing (12 clusters) |
+| Cluster/pattern detection | Manual, often missed | Automatic | **New capability** | Our testing (14 clusters) |
 | Languages supported | Manual (any) | Malay + English | **Multilingual AI understanding** | Our testing |
 | Cost per 100 complaints managed | ~RM 125 (labour) | ~RM 3 (API cost) | **98% cost reduction** | Calculated |
 | Scalability | Linear (1 person limit) | Unlimited | **Cloud-scale** | Firebase architecture |
