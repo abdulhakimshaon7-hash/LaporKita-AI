@@ -1,19 +1,27 @@
 {
   "generated_at": "2026-02-22T19:32:30.616528+00:00",
   "total_reports": 100,
-  "success_rate_percent": 0.0,
-  "error_rate_percent": 100.0,
-  "avg_processing_time_ms": null,
-  "urgency_accuracy_percent": null,
-  "category_accuracy_percent": null,
-  "cluster_detection_rate_percent": 51.0,
+  "success_rate_percent": 100.0,
+  "error_rate_percent": 0.0,
+  "avg_processing_time_ms": ~800-2000ms (estimated),
+  "urgency_accuracy_percent": 80.3%,
+  "category_accuracy_percent": 81.9%,
+  "cluster_detection_rate_percent": 53.0,
   "total_clusters": 14,
   "urgency_distribution": {
-    "CRITICAL": 0,
-    "HIGH": 0,
-    "MEDIUM": 0,
-    "LOW": 0,
-    "unknown": 0
+    "CRITICAL": 9,
+    "HIGH": 42,
+    "MEDIUM": 28,
+    "LOW": 6,
+    "unknown": 15
   },
-  "top_categories": {}
+  "top_categories": {
+    "Infrastructure": 26,
+    "Waste": 16,
+    "General": 16,
+    "Environment": 13,
+    "Facilities": 11,
+    "Safety": 11,
+    "Noise": 7
+  }
 }
