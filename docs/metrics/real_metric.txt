@@ -1,3 +1,5 @@
+CORRECTION: Historical console capture below. Exact urgency agreement is 74/94 = 78.7%; 80.3% is the partial-credit score (74 + 0.5*3)/94. The displayed one partial case is a historical formatting error. See EVALUATION.md. Other counts may describe a separate 100-report population.
+
 =================================================================
        🎯  LAPORKITA-AI TESTING METRICS REPORT
        Generated: 24 February 2026, 03:35 AM

@@ -1,3 +1,5 @@
+> Evaluation clarification: 78.7% urgency exact agreement; 80.3% partial-credit score. See [EVALUATION.md](EVALUATION.md). Impact scenarios below are proposals, not measured field outcomes.
+
 ## SDG 11 — Sustainable Cities and Communities
 
 LaporKita-AI directly advances SDG 11 (Sustainable Cities and Communities) by
@@ -35,7 +37,7 @@ accountability mechanism.
 
 Our system creates a verifiable, searchable digital record of every complaint
 submitted, AI-analyzed, and action taken — bringing institutional-grade transparency
-to grassroots community governance. In our testing of 94 reports, 80.3% were
+to grassroots community governance. In our testing of 94 reports, 78.7% were
 correctly urgency-classified and 81.9% correctly categorized, all stored with full
 timestamps and metadata in Firebase — representing a complete, tamper-evident
 audit trail that a community leader could present to local authorities as evidence

@@ -384,3 +384,8 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 ---
 
 *Built with ❤️ for KitaHack 2026 — using Google technology to make communities safer and more connected.*
+
+
+## Evidence and implementation notes
+
+See [implemented architecture](docs/ARCHITECTURE.md) and [evaluation methodology](docs/metrics/EVALUATION.md). The saved 94-record test set gives 81.9% category exact agreement and 78.7% urgency exact agreement; 80.3% is a partial-credit score. Earlier latency, scalability and social-impact statements above are prototype aspirations or historical claims, not independently established benchmarks.
